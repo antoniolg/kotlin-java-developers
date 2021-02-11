@@ -17,7 +17,3 @@ data class RenderedArticle(
     val content: String,
     val slug: String
 )
-
-interface TitleRender {
-    fun renderTitle(article: Article): String
-}

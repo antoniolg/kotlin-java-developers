@@ -17,14 +17,14 @@ class HtmlController {
 
     @GetMapping("/article/{slug}")
     fun article(@PathVariable slug: String, model: Model): String {
-        requireNotNull(findArticleBySlug(slug)).let {
-            val renderedArticle = it.render(object : TitleRender {
-                override fun renderTitle(article: Article): String = when (article.type) {
-                    Article.Type.TEXT -> article.title
-                    Article.Type.VIDEO -> "${article.title} (Video)"
+        requireNotNull(findArticleBySlug(slug)).let { article ->
+            val renderedArticle = article.render {
+                when (it.type) {
+                    Article.Type.TEXT -> it.title
+                    Article.Type.VIDEO -> "${it.title} (Video)"
                 }
-            })
-            model["title"] = it.title
+            }
+            model["title"] = article.title
             model["article"] = renderedArticle
         }
 
@@ -35,9 +35,7 @@ class HtmlController {
         val result = ArrayList<RenderedArticle>()
 
         for (article in articles) {
-            result.add(article.render(object : TitleRender {
-                override fun renderTitle(article: Article): String = article.title
-            }))
+            result.add(article.render { it.title })
         }
 
         return result
