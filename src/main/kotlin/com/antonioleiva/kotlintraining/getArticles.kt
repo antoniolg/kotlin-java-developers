@@ -12,3 +12,13 @@ fun getArticles(): List<Article> = listOf(
         type = Article.Type.VIDEO
     )
 )
+
+fun findArticleBySlug(slug: String): Article? {
+    for (article in getArticles()) {
+        if (article.slug == slug) {
+            return article
+        }
+    }
+
+    return null
+}

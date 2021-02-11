@@ -3,6 +3,7 @@ package com.antonioleiva.kotlintraining
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 
 @Controller
 class HtmlController {
@@ -12,6 +13,17 @@ class HtmlController {
         model["title"] = "Blog"
         model["articles"] = convertArticles(getArticles())
         return "blog"
+    }
+
+    @GetMapping("/article/{slug}")
+    fun article(@PathVariable slug: String, model: Model): String {
+        val article = requireNotNull(findArticleBySlug(slug))
+        val renderedArticle = article.render()
+
+        model["title"] = renderedArticle.title
+        model["article"] = renderedArticle
+
+        return "article"
     }
 
     private fun convertArticles(articles: List<Article>): List<RenderedArticle> {
