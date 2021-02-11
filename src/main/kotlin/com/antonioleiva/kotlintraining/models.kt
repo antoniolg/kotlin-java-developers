@@ -11,3 +11,9 @@ data class Article(
         VIDEO
     }
 }
+
+data class RenderedArticle(
+    val title: String,
+    val content: String,
+    val slug: String
+)
