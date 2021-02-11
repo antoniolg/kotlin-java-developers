@@ -9,10 +9,15 @@ class KotlintrainingApplication
 fun main(args: Array<String>) {
     runApplication<KotlintrainingApplication>(*args)
 
-    val name = args[0]
-    printMessage("Hello $name")
+    printMessages(*args)
 }
 
 private fun printMessage(message: String) {
     println(message)
+}
+
+private fun printMessages(vararg messages: String) {
+    for (m in messages) {
+        println(m)
+    }
 }
