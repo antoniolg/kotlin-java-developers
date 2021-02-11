@@ -1,18 +1,15 @@
 package com.antonioleiva.kotlintraining
 
+import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.runApplication
 
 @SpringBootApplication
 class KotlintrainingApplication
 
 fun main(args: Array<String>) {
-    runApplication<KotlintrainingApplication>(*args)
-
-    val name = args[0]
-    "Hello $name".println()
+    runApplication2<KotlintrainingApplication>(*args)
 }
 
-private fun String.println() {
-    println(this)
+inline fun <reified T> runApplication2(vararg args: String) {
+    SpringApplication.run(T::class.java, *args)
 }
