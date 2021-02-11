@@ -9,8 +9,8 @@ class HtmlController {
 
     @GetMapping("/")
     fun blog(model: Model): String {
-        model.set("title", "Blog")
-        model.set("articles", getArticles())
+        model["title"] = "Blog"
+        model["articles"] = getArticles()
         return "blog"
     }
 
