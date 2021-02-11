@@ -8,5 +8,5 @@ operator fun Model.set(attributeName: String, attributeValue: Any?) {
     addAttribute(attributeName, attributeValue)
 }
 
-fun Article.render(titleRender: (Article) -> String): RenderedArticle =
+fun Article.render(titleRender: (Article) -> String = { it.title }): RenderedArticle =
     RenderedArticle(titleRender(this), content, slug)
