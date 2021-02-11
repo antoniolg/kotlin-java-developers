@@ -8,7 +8,9 @@ class KotlintrainingApplication
 
 fun main(args: Array<String>) {
     runApplication<KotlintrainingApplication>(*args)
-    printMessage("Hello world")
+
+    val name = args[0]
+    printMessage("Hello $name")
 }
 
 private fun printMessage(message: String) {
