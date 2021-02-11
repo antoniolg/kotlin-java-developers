@@ -18,10 +18,11 @@ class HtmlController {
     @GetMapping("/article/{slug}")
     fun article(@PathVariable slug: String, model: Model): String {
         val article = requireNotNull(findArticleBySlug(slug))
-        val renderedArticle = article.render()
-
-        model["title"] = renderedArticle.title
-        model["article"] = renderedArticle
+        with(article) {
+            val renderedArticle = render()
+            model["title"] = title
+            model["article"] = renderedArticle
+        }
 
         return "article"
     }
