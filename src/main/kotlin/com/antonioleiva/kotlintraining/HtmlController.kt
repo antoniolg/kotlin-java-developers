@@ -18,15 +18,7 @@ class HtmlController {
         val result = ArrayList<RenderedArticle>()
 
         for (article in articles) {
-
-            val renderedTitle = when (article.type) {
-                Article.Type.TEXT -> article.title
-                Article.Type.VIDEO -> "${article.title} (Video)"
-            }
-
-            val renderedArticle = RenderedArticle(renderedTitle, article.content, article.slug)
-
-            result.add(renderedArticle)
+            result.add(article.render())
         }
 
         return result
