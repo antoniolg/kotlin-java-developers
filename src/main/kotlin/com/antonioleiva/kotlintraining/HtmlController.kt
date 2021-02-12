@@ -28,6 +28,14 @@ class HtmlController {
         return "article"
     }
 
+    @GetMapping("/article/{slug}/like")
+    fun likeArticle(@PathVariable slug: String, model: Model): String {
+        requireNotNull(repository.findArticleBySlug(slug)).let {
+            it.likes++
+            return article(slug, model)
+        }
+    }
+
     private fun renderTitle(article: Article) = when (article.type) {
         Article.Type.TEXT -> article.title
         Article.Type.VIDEO -> "${article.title} (Video)"
