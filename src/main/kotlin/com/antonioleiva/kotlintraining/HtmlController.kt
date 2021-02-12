@@ -8,11 +8,16 @@ import org.springframework.web.bind.annotation.PathVariable
 @Controller
 class HtmlController {
 
+    companion object {
+        const val BLOG = "blog"
+        const val ARTICLE = "article"
+    }
+
     @GetMapping("/")
     fun blog(model: Model): String {
         model["title"] = "Blog"
         model["articles"] = ArticlesRepository.getArticles().map { it.render() }
-        return "blog"
+        return BLOG
     }
 
     @GetMapping("/article/{slug}")
@@ -23,7 +28,7 @@ class HtmlController {
             model["article"] = renderedArticle
         }
 
-        return "article"
+        return ARTICLE
     }
 
     @GetMapping("/article/{slug}/like")
