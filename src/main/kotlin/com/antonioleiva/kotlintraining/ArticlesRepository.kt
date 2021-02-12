@@ -17,13 +17,6 @@ class ArticlesRepository {
 
     fun getArticles(): List<Article> = articles
 
-    fun findArticleBySlug(slug: String): Article? {
-        for (article in articles) {
-            if (article.slug == slug) {
-                return article
-            }
-        }
+    fun findArticleBySlug(slug: String): Article? = articles.find { it.slug == slug }
 
-        return null
-    }
 }

@@ -13,7 +13,7 @@ class HtmlController {
     @GetMapping("/")
     fun blog(model: Model): String {
         model["title"] = "Blog"
-        model["articles"] = convertArticles(repository.getArticles())
+        model["articles"] = repository.getArticles().map { it.render() }
         return "blog"
     }
 
@@ -39,16 +39,6 @@ class HtmlController {
     private fun renderTitle(article: Article) = when (article.type) {
         Article.Type.TEXT -> article.title
         Article.Type.VIDEO -> "${article.title} (Video)"
-    }
-
-    private fun convertArticles(articles: List<Article>): List<RenderedArticle> {
-        val result = ArrayList<RenderedArticle>()
-
-        for (article in articles) {
-            result.add(article.render())
-        }
-
-        return result
     }
 
 }
