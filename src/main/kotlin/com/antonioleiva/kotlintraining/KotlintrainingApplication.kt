@@ -1,15 +1,20 @@
 package com.antonioleiva.kotlintraining
 
-import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
+import org.springframework.context.support.beans
 
 @SpringBootApplication
 class KotlintrainingApplication
 
 fun main(args: Array<String>) {
-    runApplication2<KotlintrainingApplication>(*args)
+    runApplication<KotlintrainingApplication>(*args) {
+        addInitializers(beans)
+    }
 }
 
-inline fun <reified T> runApplication2(vararg args: String) {
-    SpringApplication.run(T::class.java, *args)
+private val beans = beans {
+    bean<LocalDatasource>()
+    bean<RemoteDataSource>()
+    bean<ArticlesRepository>()
 }
