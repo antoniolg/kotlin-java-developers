@@ -25,3 +25,10 @@ data class RenderedArticle(
     val slug: String,
     val likesInfo: String
 )
+
+sealed class Filter {
+    object None : Filter()
+    class ByType(val type: Article.Type) : Filter()
+}
+
+data class RenderedFilter(val value: String, val selected: Boolean = false)

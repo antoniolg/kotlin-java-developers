@@ -14,3 +14,13 @@ fun Article.render(titleRender: (Article) -> String = { it.title }): RenderedArt
 
     return RenderedArticle(titleRender(this), content, slug, likesInfo)
 }
+
+fun String?.toFilter(): Filter {
+    return this
+        ?.let { filter -> Article.Type.values().find { it.name.equals(filter, true) } }
+        ?.let { type -> Filter.ByType(type) }
+        ?: Filter.None
+}
+
+fun String.toRenderedFilter(selectedValue: String?): RenderedFilter =
+    RenderedFilter(this, equals(selectedValue, true))

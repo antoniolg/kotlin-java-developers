@@ -1,9 +1,9 @@
 package com.antonioleiva.kotlintraining
 
+import com.antonioleiva.kotlintraining.Article.Type
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.*
 
 @Controller
 class HtmlController {
@@ -11,12 +11,14 @@ class HtmlController {
     companion object {
         const val BLOG = "blog"
         const val ARTICLE = "article"
+        private val STRING_FILTERS = listOf("ALL") + Type.values().map(Type::toString)
     }
 
     @GetMapping("/")
-    fun blog(model: Model): String {
+    fun blog(@RequestParam(value = "filter", required = false) selectedFilter: String?, model: Model): String {
         model["title"] = "Blog"
-        model["articles"] = ArticlesRepository.getArticles().map { it.render() }
+        model["articles"] = ArticlesRepository.getByFilter(selectedFilter.toFilter()).map { it.render() }
+        model["filters"] = STRING_FILTERS.map { it.toRenderedFilter(selectedFilter) }
         return BLOG
     }
 
@@ -39,9 +41,14 @@ class HtmlController {
         }
     }
 
+    @PostMapping("/filter")
+    fun filter(@ModelAttribute filter: RenderedFilter): String {
+        return "redirect:/?filter=${filter.value}"
+    }
+
     private fun renderTitle(article: Article) = when (article.type) {
-        Article.Type.TEXT -> article.title
-        Article.Type.VIDEO -> "${article.title} (Video)"
+        Type.TEXT -> article.title
+        Type.VIDEO -> "${article.title} (Video)"
     }
 
 }

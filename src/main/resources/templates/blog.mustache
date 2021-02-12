@@ -3,6 +3,16 @@
 <h1>{{title}}</h1>
 
 <div class="articles">
+    <div>
+        <form action="/filter" method="post">
+            <select id="filter" name="value">{{#filters}}
+                <option value="{{value}}" {{#selected}}selected{{/selected}}>
+                    {{value}}
+                </option>
+            {{/filters}}</select>
+            <input type="submit" value="Filter">
+        </form>
+    </div>
     {{#articles}}
         <section>
             <header class="article-header">
