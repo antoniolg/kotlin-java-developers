@@ -1,19 +1,17 @@
 package com.antonioleiva.kotlintraining
 
+import com.antonioleiva.kotlintraining.Article.Type.TEXT
+import com.antonioleiva.kotlintraining.Article.Type.VIDEO
+
 class ArticlesRepository {
 
-    private val articles = listOf(
+    private val articles = (1..10).map {
         Article(
-            title = "Reactor Bismuth is out",
-            content = "dolor sit amet",
-            type = Article.Type.TEXT
-        ),
-        Article(
-            title = "Reactor Aluminium has landed",
-            content = "dolor sit amet",
-            type = Article.Type.VIDEO
+            title = "Title $it",
+            content = "Content ".repeat(it),
+            type = if (it % 3 == 0) VIDEO else TEXT
         )
-    )
+    }
 
     fun getArticles(): List<Article> = articles
 
