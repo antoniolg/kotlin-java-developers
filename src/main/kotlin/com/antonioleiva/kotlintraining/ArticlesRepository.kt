@@ -3,7 +3,7 @@ package com.antonioleiva.kotlintraining
 import com.antonioleiva.kotlintraining.Article.Type.TEXT
 import com.antonioleiva.kotlintraining.Article.Type.VIDEO
 
-object ArticlesRepository {
+class ArticlesRepository {
 
     private val articles = (1..10).map {
         Article(

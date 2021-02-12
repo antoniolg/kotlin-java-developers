@@ -9,7 +9,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
-class HtmlController {
+class HtmlController(val repository: ArticlesRepository) {
 
     companion object {
         const val BLOG = "blog"
@@ -23,8 +23,8 @@ class HtmlController {
             model["title"] = "Blog"
             model["filters"] = STRING_FILTERS.map { it.toRenderedFilter(selectedFilter) }
 
-            val a1 = async(Dispatchers.IO) { ArticlesRepository.getByFilter(selectedFilter.toFilter()).map { it.render() } }
-            val a2 = async(Dispatchers.IO) { ArticlesRepository.getByFilter(selectedFilter.toFilter()).map { it.render() } }
+            val a1 = async(Dispatchers.IO) { repository.getByFilter(selectedFilter.toFilter()).map { it.render() } }
+            val a2 = async(Dispatchers.IO) { repository.getByFilter(selectedFilter.toFilter()).map { it.render() } }
 
             model["articles"] = a1.await() + a2.await()
             BLOG
@@ -32,7 +32,7 @@ class HtmlController {
 
     @GetMapping("/article/{slug}")
     fun article(@PathVariable slug: String, model: Model): String {
-        requireNotNull(ArticlesRepository.findArticleBySlug(slug)).let { article ->
+        requireNotNull(repository.findArticleBySlug(slug)).let { article ->
             val renderedArticle = article.render(::renderTitle)
             model["title"] = article.title
             model["article"] = renderedArticle
@@ -43,7 +43,7 @@ class HtmlController {
 
     @GetMapping("/article/{slug}/like")
     fun likeArticle(@PathVariable slug: String, model: Model): String {
-        requireNotNull(ArticlesRepository.findArticleBySlug(slug)).let {
+        requireNotNull(repository.findArticleBySlug(slug)).let {
             it.likes++
             return article(slug, model)
         }
