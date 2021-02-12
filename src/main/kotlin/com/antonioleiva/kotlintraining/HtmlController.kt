@@ -1,6 +1,9 @@
 package com.antonioleiva.kotlintraining
 
 import com.antonioleiva.kotlintraining.Article.Type
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -15,12 +18,17 @@ class HtmlController {
     }
 
     @GetMapping("/")
-    fun blog(@RequestParam(value = "filter", required = false) selectedFilter: String?, model: Model): String {
-        model["title"] = "Blog"
-        model["articles"] = ArticlesRepository.getByFilter(selectedFilter.toFilter()).map { it.render() }
-        model["filters"] = STRING_FILTERS.map { it.toRenderedFilter(selectedFilter) }
-        return BLOG
-    }
+    suspend fun blog(@RequestParam(value = "filter", required = false) selectedFilter: String?, model: Model): String =
+        coroutineScope {
+            model["title"] = "Blog"
+            model["filters"] = STRING_FILTERS.map { it.toRenderedFilter(selectedFilter) }
+
+            val a1 = async(Dispatchers.IO) { ArticlesRepository.getByFilter(selectedFilter.toFilter()).map { it.render() } }
+            val a2 = async(Dispatchers.IO) { ArticlesRepository.getByFilter(selectedFilter.toFilter()).map { it.render() } }
+
+            model["articles"] = a1.await() + a2.await()
+            BLOG
+        }
 
     @GetMapping("/article/{slug}")
     fun article(@PathVariable slug: String, model: Model): String {

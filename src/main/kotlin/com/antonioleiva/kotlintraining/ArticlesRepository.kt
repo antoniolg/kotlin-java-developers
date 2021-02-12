@@ -17,9 +17,12 @@ object ArticlesRepository {
 
     fun findArticleBySlug(slug: String): Article? = articles.find { it.slug == slug }
 
-    fun getByFilter(filter: Filter): List<Article> = when (filter) {
-        is Filter.ByType -> articles.filter { it.type == filter.type }
-        Filter.None -> articles
+    fun getByFilter(filter: Filter): List<Article> {
+        Thread.sleep(2000)
+        return when (filter) {
+            is Filter.ByType -> articles.filter { it.type == filter.type }
+            Filter.None -> articles
+        }
     }
 
 }
