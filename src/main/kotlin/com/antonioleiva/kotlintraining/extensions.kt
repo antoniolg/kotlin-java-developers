@@ -8,7 +8,9 @@ operator fun Model.set(attributeName: String, attributeValue: Any?) {
     addAttribute(attributeName, attributeValue)
 }
 
-fun Article.render(titleRender: (Article) -> String = { it.title }): RenderedArticle {
+typealias TitleRenderer = (Article) -> String
+
+fun Article.render(titleRender: TitleRenderer = { it.title }): RenderedArticle {
     val popularInfo = if (popular) "(POPULAR)" else ""
     val likesInfo = "$likes likes $popularInfo"
 
